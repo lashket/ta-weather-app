@@ -8,7 +8,6 @@ import 'package:taweather/utils/constants.dart';
 class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<WeatherBloc>(context).add(RequestWeatherFromAPi(cityId: CITY_ID));
     return BlocListener<WeatherBloc, WeatherState>(
       listener: (context, state) {
         if (state is WeatherLoaded) {
@@ -18,6 +17,9 @@ class LoadingScreen extends StatelessWidget {
       },
       child: BlocBuilder<WeatherBloc, WeatherState>(
         builder: (context, state) {
+          if(state is WeatherInitial) {
+            BlocProvider.of<WeatherBloc>(context).add(RequestWeatherFromAPi(cityId: CITY_ID));
+          }
           if(state is WeatherLoading) {
             return _content(context);
           }

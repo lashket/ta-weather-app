@@ -17,16 +17,27 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     if(event is RequestWeatherFromAPi) {
       yield WeatherLoading();
       try {
+        print(await _repository.getItemsCount());
         if(await _repository.getItemsCount() != 3) {
           await _loadAndSaveData(event.cityId);
         } else {
           final Weather todayDbWeather = await _repository.getWeatherByDayPointer(TODAY);
           if(todayDbWeather.applicableDate != DateUtils.instance.currentDateInResponseFormat()) {
+            print("today db weather date ${todayDbWeather.applicableDate } current date - ${DateUtils.instance.currentDateInResponseFormat()}");
            await _loadAndSaveData(event.cityId);
           }
         }
         yield WeatherLoaded();
       } catch(_) {
+        yield WeatherLoadingError();
+      }
+    }
+    if (event is GetWeatherByDayPointer) {
+      yield WeatherLoading();
+      try {
+        yield SingleWeatherLoaded(
+            weather: await _repository.getWeatherByDayPointer(event.dayPointer));
+      } catch (_) {
         yield WeatherLoadingError();
       }
     }

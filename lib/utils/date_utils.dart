@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class DateUtils {
 
   DateUtils._privateConstructor();
@@ -21,7 +23,8 @@ class DateUtils {
 
   String currentDateInResponseFormat() {
     final currentDate = _getCurrentDate();
-    return "${currentDate.year}-${currentDate.month}-${currentDate.day}";
+    final dateFormat = DateFormat("yyyy-MM-dd").format(currentDate);
+    return dateFormat;
   }
 
   DateTime _getCurrentDate() {
