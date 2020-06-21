@@ -7,25 +7,25 @@ part of 'weather_database.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
-class weather extends DataClass implements Insertable<weather> {
+class Weather extends DataClass implements Insertable<Weather> {
   final int id;
   final double temperature;
   final String applicableDate;
   final String dayPointer;
   final String weatherStateAbbr;
-  weather(
+  Weather(
       {@required this.id,
       @required this.temperature,
       @required this.applicableDate,
       @required this.dayPointer,
       @required this.weatherStateAbbr});
-  factory weather.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory Weather.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final doubleType = db.typeSystem.forDartType<double>();
     final stringType = db.typeSystem.forDartType<String>();
-    return weather(
+    return Weather(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       temperature: doubleType
           .mapFromDatabaseResponse(data['${effectivePrefix}temperature']),
@@ -76,10 +76,10 @@ class weather extends DataClass implements Insertable<weather> {
     );
   }
 
-  factory weather.fromJson(Map<String, dynamic> json,
+  factory Weather.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return weather(
+    return Weather(
       id: serializer.fromJson<int>(json['id']),
       temperature: serializer.fromJson<double>(json['temperature']),
       applicableDate: serializer.fromJson<String>(json['applicableDate']),
@@ -99,13 +99,13 @@ class weather extends DataClass implements Insertable<weather> {
     };
   }
 
-  weather copyWith(
+  Weather copyWith(
           {int id,
           double temperature,
           String applicableDate,
           String dayPointer,
           String weatherStateAbbr}) =>
-      weather(
+      Weather(
         id: id ?? this.id,
         temperature: temperature ?? this.temperature,
         applicableDate: applicableDate ?? this.applicableDate,
@@ -114,7 +114,7 @@ class weather extends DataClass implements Insertable<weather> {
       );
   @override
   String toString() {
-    return (StringBuffer('weather(')
+    return (StringBuffer('Weather(')
           ..write('id: $id, ')
           ..write('temperature: $temperature, ')
           ..write('applicableDate: $applicableDate, ')
@@ -134,7 +134,7 @@ class weather extends DataClass implements Insertable<weather> {
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is weather &&
+      (other is Weather &&
           other.id == this.id &&
           other.temperature == this.temperature &&
           other.applicableDate == this.applicableDate &&
@@ -142,7 +142,7 @@ class weather extends DataClass implements Insertable<weather> {
           other.weatherStateAbbr == this.weatherStateAbbr);
 }
 
-class WeathersCompanion extends UpdateCompanion<weather> {
+class WeathersCompanion extends UpdateCompanion<Weather> {
   final Value<int> id;
   final Value<double> temperature;
   final Value<String> applicableDate;
@@ -165,7 +165,7 @@ class WeathersCompanion extends UpdateCompanion<weather> {
         applicableDate = Value(applicableDate),
         dayPointer = Value(dayPointer),
         weatherStateAbbr = Value(weatherStateAbbr);
-  static Insertable<weather> custom({
+  static Insertable<Weather> custom({
     Expression<int> id,
     Expression<double> temperature,
     Expression<String> applicableDate,
@@ -218,7 +218,7 @@ class WeathersCompanion extends UpdateCompanion<weather> {
   }
 }
 
-class $WeathersTable extends Weathers with TableInfo<$WeathersTable, weather> {
+class $WeathersTable extends Weathers with TableInfo<$WeathersTable, Weather> {
   final GeneratedDatabase _db;
   final String _alias;
   $WeathersTable(this._db, [this._alias]);
@@ -295,7 +295,7 @@ class $WeathersTable extends Weathers with TableInfo<$WeathersTable, weather> {
   @override
   final String actualTableName = 'weathers';
   @override
-  VerificationContext validateIntegrity(Insertable<weather> instance,
+  VerificationContext validateIntegrity(Insertable<Weather> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -340,9 +340,9 @@ class $WeathersTable extends Weathers with TableInfo<$WeathersTable, weather> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  weather map(Map<String, dynamic> data, {String tablePrefix}) {
+  Weather map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return weather.fromData(data, _db, prefix: effectivePrefix);
+    return Weather.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override

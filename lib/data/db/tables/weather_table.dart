@@ -1,7 +1,7 @@
 
 import 'package:moor_flutter/moor_flutter.dart';
 
-@DataClassName("weather")
+@DataClassName("Weather")
 class Weathers extends Table {
 
   IntColumn get id => integer().autoIncrement()();

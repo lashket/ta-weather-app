@@ -19,6 +19,11 @@ class DateUtils {
     return "${currentDate.year}/${currentDate.month}/${currentDate.day + 1}";
   }
 
+  String currentDateInResponseFormat() {
+    final currentDate = _getCurrentDate();
+    return "${currentDate.year}-${currentDate.month}-${currentDate.day}";
+  }
+
   DateTime _getCurrentDate() {
     return DateTime.now();
   }

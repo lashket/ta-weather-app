@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:taweather/data/db/weather_database.dart';
 part 'weather_api_model.g.dart';
 
 @JsonSerializable()
@@ -13,5 +14,14 @@ class WeatherApiModel {
   factory WeatherApiModel.fromJson(Map<String, dynamic> json) => _$WeatherApiModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$WeatherApiModelToJson(this);
+
+  Weather toDbModel(String dayPointer) {
+    return Weather(
+        temperature: temperature,
+        dayPointer: dayPointer,
+        applicableDate: date,
+        weatherStateAbbr: weatherStateAbbr
+    );
+  }
 
 }

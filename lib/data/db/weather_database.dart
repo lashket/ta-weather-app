@@ -13,7 +13,21 @@ class WeatherDatabase extends _$WeatherDatabase {
 
   WeatherDatabase() : super(_openConnection());
 
+  Future<Weather> getWeatherItemByPointer(String pointer) {
+    return (select(weathers)..where((tbl) => tbl.dayPointer.equals(pointer))).watchSingle().first;
+  }
 
+  Future<void> clearDatabase() async {
+    return await delete(weathers).go();
+  }
+
+  Future<int> insertWeather(Weather weather) async {
+    return await into(weathers).insert(weather);
+  }
+
+  Future<int> itemsCount() async {
+    return (await select(weathers).get()).length;
+  }
 
   @override
   int get schemaVersion => 1;
