@@ -5,6 +5,7 @@ import 'package:taweather/bloc/weather/weather_bloc.dart';
 import 'package:taweather/bloc/weather/weather_event.dart';
 import 'package:taweather/bloc/weather/weather_state.dart';
 import 'package:taweather/data/db/weather_database.dart';
+import 'package:taweather/screens/video/video_screen.dart';
 import 'package:taweather/utils/constants.dart';
 
 class WeatherScreen extends StatelessWidget {
@@ -16,23 +17,30 @@ class WeatherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _updateCurrentDay(TODAY, context);
-    return BlocBuilder<WeatherBloc, WeatherState>(
-      builder: (context, state) {
-        if(state is WeatherLoading) {
-          return Container(
-            color: Theme.of(context).primaryColor,
-          );
+    return BlocListener<WeatherBloc, WeatherState>(
+      listener: (context, state) {
+        if (state is ShowVideoState) {
+          // Navigate to video screen
         }
-        if(state is SingleWeatherLoaded) {
-          return _content(context, state.weather);
-        }
-        if(state is WeatherLoadingError) {
-          return Container(
-            color: Colors.red,
-          );
-        }
-        return Container();
       },
+      child: BlocBuilder<WeatherBloc, WeatherState>(
+        builder: (context, state) {
+          if(state is WeatherLoading) {
+            return Container(
+              color: Theme.of(context).primaryColor,
+            );
+          }
+          if(state is SingleWeatherLoaded) {
+            return _content(context, state.weather);
+          }
+          if(state is WeatherLoadingError) {
+            return Container(
+              color: Colors.red,
+            );
+          }
+          return Container();
+        },
+      ),
     );
 //    return Container(
 //      child: _content(context),
@@ -77,7 +85,7 @@ class WeatherScreen extends StatelessWidget {
                           visible: _dayPointer == TOMORROW,
                           child: RaisedButton(
                             onPressed: (){
-
+                              BlocProvider.of<WeatherBloc>(context).add(ShowVideoWidget());
                             },
                             color: Theme.of(context).accentColor,
                             child: Text(
