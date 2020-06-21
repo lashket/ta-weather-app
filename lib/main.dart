@@ -20,7 +20,7 @@ class WeatherApp extends StatelessWidget {
         routes: {
           '/': (context) => LoadingScreen(),
           '/weather_info': (context) => WeatherScreen(),
-          '/video_screen': (context) => VideoScreen()
+//          '/video_screen': (context) => VideoScreen()
         },
         title: 'Weather app',
         theme: ThemeData(

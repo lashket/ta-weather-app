@@ -29,6 +29,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         }
         yield WeatherLoaded();
       } catch(_) {
+        print('error - $_ ');
         yield WeatherLoadingError();
       }
     }
