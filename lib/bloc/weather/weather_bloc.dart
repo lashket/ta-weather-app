@@ -41,9 +41,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         yield WeatherLoadingError();
       }
     }
-    if (event is ShowVideoWidget) {
-      yield ShowVideoState();
-    }
   }
 
   Future<void> _loadAndSaveData(int cityId) async {
