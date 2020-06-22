@@ -4,27 +4,27 @@ class DateUtils {
 
   DateUtils._privateConstructor();
 
+  static const String REQUEST_DATE_PATTERN = "yyyy/MM/dd";
+  static const String RESPONSE_DATE_PATTERN = "yyyy-MM-dd";
+
   static final DateUtils instance = DateUtils._privateConstructor();
 
   String todayApiRequestDate() {
-    final currentDate = _getCurrentDate();
-    return "${currentDate.year}/${currentDate.month}/${currentDate.day}";
+    return DateFormat(REQUEST_DATE_PATTERN).format(_getCurrentDate());
   }
 
   String yesterdayApiRequestDate() {
-    final currentDate = _getCurrentDate();
-    return "${currentDate.year}/${currentDate.month}/${currentDate.day - 1}";
+    final yesterdayDate = DateTime(_getCurrentDate().year, _getCurrentDate().month, _getCurrentDate().day - 1);
+    return DateFormat(REQUEST_DATE_PATTERN).format(yesterdayDate);
   }
 
   String tomorrowApiRequestDate() {
-    final currentDate = _getCurrentDate();
-    return "${currentDate.year}/${currentDate.month}/${currentDate.day + 1}";
+    final tomorrowDate = _getCurrentDate().add(Duration(days: 1));
+    return DateFormat(REQUEST_DATE_PATTERN).format(tomorrowDate);
   }
 
   String currentDateInResponseFormat() {
-    final currentDate = _getCurrentDate();
-    final dateFormat = DateFormat("yyyy-MM-dd").format(currentDate);
-    return dateFormat;
+    return DateFormat(RESPONSE_DATE_PATTERN).format(_getCurrentDate());
   }
 
   DateTime _getCurrentDate() {
