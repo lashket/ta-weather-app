@@ -28,7 +28,9 @@ dependencies:
   moor_flutter: ^3.0.0
   moor_ffi: ^0.6.0
   http: ^0.12.1
+  equatable: ^1.2.0
   path_provider: ^1.6.11
+  video_player: ^0.10.11+1
   flutter:
     sdk: flutter
 
@@ -61,6 +63,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/img/
+    - assets/video/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

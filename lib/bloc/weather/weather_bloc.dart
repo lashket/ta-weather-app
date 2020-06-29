@@ -8,28 +8,26 @@ import 'package:taweather/utils/constants.dart';
 import 'package:taweather/utils/date_utils.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-
   final WeatherRepository _repository = WeatherRepository();
-
 
   @override
   Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
-    if(event is RequestWeatherFromAPi) {
+    if (event is RequestWeatherFromAPi) {
       yield WeatherLoading();
       try {
         print(await _repository.getItemsCount());
-        if(await _repository.getItemsCount() != 3) {
+        if (await _repository.getItemsCount() != 3) {
           await _loadAndSaveData(event.cityId);
         } else {
-          final Weather todayDbWeather = await _repository.getWeatherByDayPointer(TODAY);
-          if(todayDbWeather.applicableDate != DateUtils.instance.currentDateInResponseFormat()) {
-            print("today db weather date ${todayDbWeather.applicableDate } current date - ${DateUtils.instance.currentDateInResponseFormat()}");
-           await _loadAndSaveData(event.cityId);
+          final Weather todayDbWeather =
+              await _repository.getWeatherByDayPointer(TODAY);
+          if (todayDbWeather.applicableDate !=
+              DateUtils.instance.currentDateInResponseFormat()) {
+            await _loadAndSaveData(event.cityId);
           }
         }
         yield WeatherLoaded();
-      } catch(_) {
-        print('error - $_ ');
+      } catch (_) {
         yield WeatherLoadingError();
       }
     }
@@ -37,30 +35,29 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       yield WeatherLoading();
       try {
         yield SingleWeatherLoaded(
-            weather: await _repository.getWeatherByDayPointer(event.dayPointer));
+            weather:
+                await _repository.getWeatherByDayPointer(event.dayPointer));
       } catch (_) {
         yield WeatherLoadingError();
       }
     }
-    if(event is ShowVideoWidget) {
-      yield ShowVideoState();
-    }
   }
 
-  Future<void> _loadAndSaveData(int cityId) async{
+
+
+  Future<void> _loadAndSaveData(int cityId) async {
     _repository.clearAllRecords();
-    final List<WeatherApiModel> yesterdayWeathers = await _repository
-        .getWeather(
-        cityId, DateUtils.instance.yesterdayApiRequestDate());
-    await _repository.insertWeather(yesterdayWeathers.first.toDbModel(YESTERDAY));
-    final List<WeatherApiModel> todayWeathers = await _repository
-        .getWeather(
-        cityId, DateUtils.instance.todayApiRequestDate());
-    await _repository.insertWeather(todayWeathers.first.toDbModel(TODAY));
-    final List<WeatherApiModel> tomorrowWeathers = await _repository
-        .getWeather(
-        cityId, DateUtils.instance.tomorrowApiRequestDate());
-    await _repository.insertWeather(tomorrowWeathers.first.toDbModel(TOMORROW));
+    await Future.wait([
+      _getAndSaveData(YESTERDAY, cityId, DateUtils.instance.yesterdayApiRequestDate()),
+      _getAndSaveData(TODAY, cityId, DateUtils.instance.todayApiRequestDate()),
+      _getAndSaveData(TOMORROW, cityId, DateUtils.instance.tomorrowApiRequestDate())
+    ]);
+  }
+
+  Future<void> _getAndSaveData(String day, int cityId, String date) async {
+    final List<WeatherApiModel> weathers =
+        await _repository.getWeather(cityId, date);
+    await _repository.insertWeather(weathers.first.toDbModel(day));
   }
 
   @override

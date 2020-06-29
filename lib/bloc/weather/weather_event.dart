@@ -1,5 +1,12 @@
-abstract class WeatherEvent {
+import 'package:equatable/equatable.dart';
+
+abstract class WeatherEvent extends Equatable {
   const WeatherEvent();
+
+  @override
+
+  List<Object> get props => [];
+
 }
 
 class RequestWeatherFromAPi extends WeatherEvent {
@@ -8,6 +15,10 @@ class RequestWeatherFromAPi extends WeatherEvent {
 
   const RequestWeatherFromAPi({this.cityId});
 
+  @override
+  List<Object> get props => [
+    cityId
+  ];
 }
 
 class GetWeatherByDayPointer extends WeatherEvent {
@@ -16,6 +27,10 @@ class GetWeatherByDayPointer extends WeatherEvent {
 
   const GetWeatherByDayPointer({this.dayPointer});
 
-}
+  @override
 
-class ShowVideoWidget extends WeatherEvent {}
+  List<Object> get props => [
+    dayPointer
+  ];
+
+}

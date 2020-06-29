@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:taweather/data/db/weather_database.dart';
 part 'weather_api_model.g.dart';
 
 @JsonSerializable()
-class WeatherApiModel {
+class WeatherApiModel extends Equatable {
 
   @JsonKey(name: "the_temp") double temperature;
   @JsonKey(name: "applicable_date") String date;
@@ -24,4 +25,10 @@ class WeatherApiModel {
     );
   }
 
+  @override
+  List<Object> get props => [
+    temperature,
+    date,
+    weatherStateAbbr
+  ];
 }

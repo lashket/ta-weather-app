@@ -9,38 +9,33 @@ import 'package:taweather/screens/video/video_screen.dart';
 import 'package:taweather/utils/constants.dart';
 
 class WeatherScreen extends StatelessWidget {
-
   void _updateCurrentDay(String dayPointer, BuildContext context) {
-    BlocProvider.of<WeatherBloc>(context).add(GetWeatherByDayPointer(dayPointer: dayPointer));
+    BlocProvider.of<WeatherBloc>(context)
+        .add(GetWeatherByDayPointer(dayPointer: dayPointer));
   }
 
   @override
   Widget build(BuildContext context) {
     _updateCurrentDay(TODAY, context);
-    return BlocListener<WeatherBloc, WeatherState>(
-      listener: (context, state) {
-        if (state is ShowVideoState) {
-          // Navigate to video screen
+    return BlocBuilder<WeatherBloc, WeatherState>(
+      builder: (context, state) {
+        if (state is WeatherLoading) {
+          return Container(
+            color: Theme.of(context).primaryColor,
+          );
         }
+        if (state is SingleWeatherLoaded) {
+          return _content(context, state.weather);
+        }
+        if (state is WeatherLoadingError) {
+          return Container(
+            color: Colors.red,
+          );
+        }
+        return Container(
+          color: Colors.green,
+        );
       },
-      child: BlocBuilder<WeatherBloc, WeatherState>(
-        builder: (context, state) {
-          if(state is WeatherLoading) {
-            return Container(
-              color: Theme.of(context).primaryColor,
-            );
-          }
-          if(state is SingleWeatherLoaded) {
-            return _content(context, state.weather);
-          }
-          if(state is WeatherLoadingError) {
-            return Container(
-              color: Colors.red,
-            );
-          }
-          return Container();
-        },
-      ),
     );
 //    return Container(
 //      child: _content(context),
@@ -63,29 +58,35 @@ class WeatherScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          child: SvgPicture.asset('assets/img/${weather.weatherStateAbbr}.svg'),
+                          child: SvgPicture.asset(
+                              'assets/img/${weather.weatherStateAbbr}.svg'),
                           width: 100,
                           height: 100,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 16.0),
-                          child: Text('Погода в $CITY_NAME',style: TextStyle(
-                              fontSize: 24.0,
-                              color: Colors.white
-                          ),),
+                          child: Text(
+                            'Погода в $CITY_NAME',
+                            style:
+                                TextStyle(fontSize: 24.0, color: Colors.white),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 16.0),
-                          child: Text('Температура - ${weather.temperature.round()}',style: TextStyle(
-                              fontSize: 36.0,
-                              color: Colors.white.withOpacity(0.5)
-                          ),),
+                          child: Text(
+                            'Температура - ${weather.temperature.round()}',
+                            style: TextStyle(
+                                fontSize: 36.0,
+                                color: Colors.white.withOpacity(0.5)),
+                          ),
                         ),
                         Visibility(
                           visible: _dayPointer == TOMORROW,
                           child: RaisedButton(
-                            onPressed: (){
-                              BlocProvider.of<WeatherBloc>(context).add(ShowVideoWidget());
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context,
+                                  '/video_screen');
                             },
                             color: Theme.of(context).accentColor,
                             child: Text(
@@ -96,7 +97,6 @@ class WeatherScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-
                   ),
                 ),
                 Positioned(
@@ -108,12 +108,12 @@ class WeatherScreen extends StatelessWidget {
                         Visibility(
                           visible: _dayPointer != YESTERDAY,
                           child: RaisedButton(
-                            onPressed: (){
+                            onPressed: () {
                               _goBackForOneDay(_dayPointer, context);
                             },
                             color: Theme.of(context).accentColor,
                             child: Text(
-                                _dayPointer == TOMORROW ? 'Сегодня' : 'Вчера',
+                              _dayPointer == TOMORROW ? 'Сегодня' : 'Вчера',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -121,7 +121,7 @@ class WeatherScreen extends StatelessWidget {
                         Visibility(
                           visible: _dayPointer != TOMORROW,
                           child: RaisedButton(
-                            onPressed: (){
+                            onPressed: () {
                               _goForwardForOneDay(_dayPointer, context);
                             },
                             color: Theme.of(context).accentColor,
@@ -142,21 +142,20 @@ class WeatherScreen extends StatelessWidget {
   }
 
   void _goBackForOneDay(String dayPointer, BuildContext context) {
-    if(dayPointer == TODAY) {
+    if (dayPointer == TODAY) {
       _updateCurrentDay(YESTERDAY, context);
     }
-    if(dayPointer == TOMORROW) {
+    if (dayPointer == TOMORROW) {
       _updateCurrentDay(TODAY, context);
     }
   }
 
   void _goForwardForOneDay(String dayPointer, BuildContext context) {
-    if(dayPointer == TODAY) {
+    if (dayPointer == TODAY) {
       _updateCurrentDay(TOMORROW, context);
     }
-    if(dayPointer == YESTERDAY) {
+    if (dayPointer == YESTERDAY) {
       _updateCurrentDay(TODAY, context);
     }
   }
-
 }
