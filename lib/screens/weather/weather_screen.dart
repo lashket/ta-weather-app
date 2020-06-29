@@ -84,11 +84,9 @@ class WeatherScreen extends StatelessWidget {
                           visible: _dayPointer == TOMORROW,
                           child: RaisedButton(
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushNamed(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VideoScreen(),
-                                  ));
+                                  '/video_screen');
                             },
                             color: Theme.of(context).accentColor,
                             child: Text(

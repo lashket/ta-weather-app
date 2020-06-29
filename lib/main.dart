@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:taweather/bloc/video/video_bloc.dart';
 import 'package:taweather/bloc/weather/weather_bloc.dart';
 import 'package:taweather/screens/loading/loading_screen.dart';
 import 'package:taweather/screens/video/video_screen.dart';
@@ -13,14 +14,17 @@ class WeatherApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => WeatherBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<WeatherBloc>(create: (context) => WeatherBloc()),
+        BlocProvider<VideoBloc>(create: (context) => VideoBloc())
+      ],
       child: MaterialApp(
         initialRoute: '/',
         routes: {
           '/': (context) => LoadingScreen(),
           '/weather_info': (context) => WeatherScreen(),
-//          '/video_screen': (context) => VideoScreen()
+          '/video_screen': (context) => VideoScreen()
         },
         title: 'Weather app',
         theme: ThemeData(
@@ -33,10 +37,3 @@ class WeatherApp extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-

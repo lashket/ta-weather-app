@@ -43,6 +43,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     }
   }
 
+
+
   Future<void> _loadAndSaveData(int cityId) async {
     _repository.clearAllRecords();
     await Future.wait([
